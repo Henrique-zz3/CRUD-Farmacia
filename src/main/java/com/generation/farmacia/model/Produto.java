@@ -1,23 +1,20 @@
 package com.generation.farmacia.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tb_categoria")
-public class Categoria {
+@Table(name = "tb_produtos")
+public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +24,15 @@ public class Categoria {
 	@Size(min = 5, max = 50, message = "O atributo nome de conter no mínimo 5 e no máximo 50 caracteres")
 	private String nome;
 	
-	@Size(min = 5, max = 1000, message = "O atributo descricao de conter no mínimo 5 e no máximo 50 caracteres")
-	private String descricao;
+	@NotNull(message = "O atributo quantidade não pode ser nulo")
+	private int quantidade;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties("categoria")
-	private List<Produto> produto;
-
+	@NotNull(message = "O valor não pode ser nulo")
+	private double preco;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("produto")
+	private Categoria categoria;
 
 	public Long getId() {
 		return id;
@@ -51,22 +50,28 @@ public class Categoria {
 		this.nome = nome;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public int getQuantidade() {
+		return quantidade;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 
-	public List<Produto> getProduto() {
-		return produto;
+	public double getPreco() {
+		return preco;
 	}
 
-	public void setProduto(List<Produto> produto) {
-		this.produto = produto;
+	public void setPreco(double preco) {
+		this.preco = preco;
 	}
 	
-	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
 	
 }
